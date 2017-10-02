@@ -1,0 +1,76 @@
+    using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Numerics;
+class ClosestTwoPoints
+{
+    static void Main(string[] args)
+    {
+        int n = int.Parse(Console.ReadLine());
+        Point[] points = new Point[n];
+        for (int i = 0; i < n; i++)
+        {
+            points[i] = Point.ReadInput(Console.ReadLine());
+        }
+
+        Point.CalculateDistance(points);
+    }
+}
+class Point
+{
+    public int X { get; set; }
+    public int Y { get; set; }
+    public Point(int xCoord, int yCoord)
+    {
+        X = xCoord;
+        Y = yCoord;
+    }
+    public static Point ReadInput(string input)
+    {
+        int[] tokens = input.Split(' ').Select(int.Parse).ToArray();
+        return new Point(tokens[0], tokens[1]);
+    }
+
+    public static void CalculateDistance(Point[] points)
+    {
+        double minValue = double.MaxValue;
+        Point toPrintFirstPoint = new Point(0, 0);
+        Point toPrintSecondPoint = new Point(0, 0);
+        for (int first = 0; first < points.Length; first++)
+        {
+            for (int i = first + 1; i < points.Length; i++)
+            {
+                double result = DistanceToUse(points, first, i);
+                if (result < minValue)
+                {
+                    minValue = result;
+                    toPrintFirstPoint = points[first];
+                    toPrintSecondPoint = points[i];
+                }
+            }
+        }
+        Printing(minValue, toPrintFirstPoint, toPrintSecondPoint);
+    }
+    private static double DistanceToUse(Point[] points, int first, int i)
+    {
+        double sideA = Math.Pow(points[first].X - points[i].X, 2);
+        double sideB = Math.Pow(points[first].Y - points[i].Y, 2);
+        return Math.Sqrt(sideA + sideB);
+    }
+    private static void Printing(double minValue, Point toPrintFirstPoint, Point toPrintSecondPoint)
+    {
+        Console.WriteLine($"{minValue:F3}");
+        Console.WriteLine($"{toPrintFirstPoint}");
+        Console.WriteLine($"{toPrintSecondPoint}");
+    }
+    public override String ToString()
+    {
+        return String.Format($"({X}, {Y})");
+    }
+}
+
+
+
+
