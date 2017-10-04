@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+class SalesReport
+{
+    static void Main(string[] args)
+    {
+        int n = int.Parse(Console.ReadLine());
+        Dictionary<string, double> salesTown = new Dictionary<string, double>();
+        for (int i = 0; i < n; i++)
+        {
+            double totalPriceProduct = new double();
+            Sale newSale = Sale.ReadInput(Console.ReadLine());
+            totalPriceProduct = newSale.Price * newSale.Quantity;
+            if (!salesTown.ContainsKey(newSale.Town))
+            {
+                salesTown.Add(newSale.Town, new double());
+            }
+            salesTown[newSale.Town] += totalPriceProduct;
+        }
+        foreach (var city in salesTown.OrderBy(x=>x.Key))
+        {
+            Console.WriteLine($"{city.Key} -> {city.Value:F2}");
+        }
+    }
+}
+class Sale
+{ 
+    public string Town { get; set; }
+    public string Product { get; set; }
+    public double Price { get; set; }
+    public double Quantity { get; set; }
+    public Sale(List<string> tokens)
+    {
+        Town = tokens[0];
+        Product = tokens[1];
+        Price = double.Parse(tokens[2]);
+        Quantity = double.Parse(tokens[3]);
+    }
+    public static Sale ReadInput(string input)
+    {
+        List<string> tokens = input.Split(' ').ToList();
+        return new Sale(tokens);
+    }
+}
