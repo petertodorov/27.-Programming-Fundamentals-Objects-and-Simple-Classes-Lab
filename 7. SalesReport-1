@@ -1,0 +1,43 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+class SalesReport
+{
+    static void Main(string[] args)
+    {
+        int n = int.Parse(Console.ReadLine());
+        List<Sale> allSalesData = new List<Sale>();
+        for (int i = 0; i < n; i++)
+        {
+            allSalesData.Add(Sale.GetInput());
+        }
+        List<string> townsList = new List<string>();
+        townsList =allSalesData.Select(s => s.Town).Distinct().OrderBy(x => x).ToList();
+        foreach (var town in townsList)
+        {
+            double result = allSalesData.Where(x => x.Town == town).Select(x => x.Quantity * x.Price).Sum();
+            Console.WriteLine($"{town} -> {result:F2}");
+        }
+    }
+    class Sale
+    {
+        public string Town { get; set; }
+        public string Product { get; set; }
+        public double  Price { get; set; }
+        public double Quantity{ get; set; }
+        public static Sale GetInput()
+        {
+            List<string> input = Console.ReadLine().Split(' ').ToList();
+            Sale saleData = new Sale()
+            {
+                Town = input[0],
+                Product = input[1],
+                Price = double.Parse(input[2]),
+                Quantity = double.Parse(input[3])
+            };
+            return saleData;
+        }
+    }
+}
